@@ -28,6 +28,7 @@ import os
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+# ALLOWED_HOSTS = []
 ALLOWED_HOSTS = ['https://scree-recorderapi.onrender.com/']
 
 
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     "videos",
     "rest_framework",
     "corsheaders",
+    "drf_yasg",
 ]
 
 MIDDLEWARE = [
@@ -87,9 +89,7 @@ WSGI_APPLICATION = "api.wsgi.application"
 #     }
 # }
 
-DATABASES = {
-    "default": dj_database_url.parse(os.environ.get("DATABASE_URL"))
-}
+DATABASES = {"default": dj_database_url.parse(os.environ.get("DATABASE_URL"))}
 
 
 # Password validation
