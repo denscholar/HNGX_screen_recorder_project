@@ -1,6 +1,6 @@
 asgiref==3.7.2
 dj-database-url==2.1.0
-Django==4.2.5
+Django==3.2
 django-cors-headers==4.2.0
 djangorestframework==3.14.0
 ffmpeg-python==0.2.0
