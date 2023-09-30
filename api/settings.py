@@ -26,10 +26,10 @@ SECRET_KEY = "django-insecure-ow3490u(d+p@rg#=etbf^$q(sk2qk6mh-)x*u&4^=ee0jrsxnf
 import os
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-# ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['https://scree-recorderapi.onrender.com/']
+ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['https://scree-recorderapi.onrender.com/']
 
 
 # Application definition
