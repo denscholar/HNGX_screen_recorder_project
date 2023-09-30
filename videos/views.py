@@ -22,38 +22,34 @@ class ScreenRecorderAPIView(APIView):
         request_body=VideoSerializer,
     )
     def post(self, request, format=None):
-        # video_chunk = request.data.get("video_chunk", None)
-
         serializer = VideoSerializer(data=request.data)
-        # print("Serializer Data:", serializer.data)
 
         if serializer.is_valid():
-            video_chunk = serializer.validated_data.get("video_file")
+            video_file = serializer.validated_data.get("video_file")
 
-            if not video_chunk:
+            if not video_file:
                 return Response(
-                    {"error": "No video chunk provided"},
+                    {"error": "No video file provided"},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
             try:
-                # video data is a base64 encoded file
-                video = Video.objects.last()  # Get the latest video record
-                unique_filename = (
-                    f"{str(uuid.uuid4())}.webm"  # Generate a unique filename
-                )
-                video.video_file.save(
-                    unique_filename, ContentFile(video_chunk), save=False
-                )
+                # Create a new video record
+                video = Video.objects.create()
+                unique_filename = f"{str(uuid.uuid4())}.webm"
+
+                # Save the uploaded file
+                video.video_file.save(unique_filename, video_file, save=False)
                 video.save()
             except Exception as e:
                 return Response(
-                    {"error": f"Error processing chunk: {str(e)}"},
+                    {"error": f"Error processing file: {str(e)}"},
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 )
 
             return Response(
-                {"message": "Chunk received successfully"}, status=status.HTTP_200_OK
+                {"message": "File received and processed successfully"},
+                status=status.HTTP_200_OK,
             )
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
