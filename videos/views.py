@@ -28,7 +28,7 @@ class ScreenRecorderAPIView(APIView):
         # print("Serializer Data:", serializer.data)
 
         if serializer.is_valid():
-            video_chunk = serializer.validated_data.get("video_chunk")
+            video_chunk = serializer.validated_data.get("video_file")
 
             if not video_chunk:
                 return Response(
@@ -37,7 +37,7 @@ class ScreenRecorderAPIView(APIView):
                 )
 
             try:
-                # Assuming your video data is a base64 encoded file
+                # video data is a base64 encoded file
                 video = Video.objects.last()  # Get the latest video record
                 unique_filename = (
                     f"{str(uuid.uuid4())}.webm"  # Generate a unique filename
