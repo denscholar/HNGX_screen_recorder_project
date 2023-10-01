@@ -3,5 +3,5 @@ from django.views.decorators.csrf import csrf_exempt
 from . import views
 
 urlpatterns = [
-    path("", views.ScreenRecorderAPIView.as_view(), name="video"),
+    path("", views.VideoUploadAPIView.as_view(), name="video"),
 ]

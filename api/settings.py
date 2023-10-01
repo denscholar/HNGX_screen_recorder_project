@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import dj_database_url
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -28,7 +29,7 @@ import os
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 # ALLOWED_HOSTS = ['https://scree-recorderapi.onrender.com/']
 
 
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "cloudinary",
     "videos",
     "rest_framework",
     "corsheaders",
@@ -141,3 +143,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+
+# CLOUDINARY_STORAGE = {
+#     'CLOUD_NAME': 'dcps9l5rl',
+#     'API_KEY': '644639737988226',
+#     'API_SECRET': 'Bk19DJNo2ayQl6zwJTFDyezRDaE'
+# }
