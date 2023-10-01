@@ -1,5 +1,6 @@
 import os
 from tempfile import NamedTemporaryFile
+from io import BytesIO
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -12,8 +13,7 @@ import base64
 class VideoUploadAPIView(APIView):
     @swagger_auto_schema(
         operation_summary="This endpoint is responsible for getting the video in chunks",
-        operation_description="""
-        """,
+        operation_description="",
         request_body=RecordedVideoSerializer,
     )
     def post(self, request, *args, **kwargs):
@@ -23,16 +23,10 @@ class VideoUploadAPIView(APIView):
         try:
             video_instance = RecordedVideo.objects.create()
 
-            # Create a temporary file to store the video chunks
-            temp_file = NamedTemporaryFile(delete=False)
+            # Create a temporary file-like object to store the video chunks
+            temp_file = BytesIO(video_chunk)
 
             try:
-                # Write the received video chunk to the temporary file
-                temp_file.write(video_chunk.read())
-
-                # Close the temporary file to flush the data to disk
-                temp_file.close()
-
                 # Check if all chunks have been received
                 if request.data.get("final_chunk"):
                     # Concatenate all chunks into the final video file
@@ -40,15 +34,12 @@ class VideoUploadAPIView(APIView):
                         "media", f"{video_instance.id}_final.mp4"
                     )
                     with open(final_video_path, "ab") as final_video:
-                        with open(temp_file.name, "rb") as temp_file_content:
-                            final_video.write(temp_file_content.read())
+                        temp_file.seek(0)  # Move the cursor to the beginning
+                        final_video.write(temp_file.read())
 
                     # Update the video file field in the database
                     video_instance.video_file.name = final_video_path
                     video_instance.save()
-
-                    # Clean up the temporary file
-                    os.remove(temp_file.name)
 
                     return Response(
                         {"message": "Video uploaded successfully."},
@@ -68,4 +59,3 @@ class VideoUploadAPIView(APIView):
             return Response(
                 {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-
