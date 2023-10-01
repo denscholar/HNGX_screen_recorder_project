@@ -7,6 +7,7 @@ from rest_framework import status
 from .models import RecordedVideo
 from .serializers import RecordedVideoSerializer
 from drf_yasg.utils import swagger_auto_schema
+from django.conf import settings
 import base64
 
 
@@ -30,8 +31,7 @@ class VideoUploadAPIView(APIView):
                 # Check if all chunks have been received
                 if request.data.get("final_chunk"):
                     # Concatenate all chunks into the final video file
-                    final_video_path = os.path.join(
-                        "media", f"{video_instance.id}_final.mp4"
+                    final_video_path = os.path.join(settings.MEDIA_ROOT, f"{video_instance.id}_final.mp4"
                     )
                     with open(final_video_path, "ab") as final_video:
                         temp_file.seek(0)  # Move the cursor to the beginning
